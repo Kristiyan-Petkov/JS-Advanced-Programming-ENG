@@ -2,6 +2,7 @@ function solve() {
     // SETTING UP MAIN TARGETS AND EVENT LISTENERS
     const addModule = document.querySelector('#container').children;
     const addBtn = addModule[3];
+    addBtn.setAttribute("onclick", "return false");
     addBtn.addEventListener('click', extract);
     const moviesList = document.querySelector("#movies > ul");
     moviesList.addEventListener('click', archive);
@@ -31,13 +32,20 @@ function solve() {
 
     // EXTRACTING FROM ADD MODULE AND POPULATING MOVIES MODULE
     function extract(e) {
-        const movieName = addModule[0].value;
-        const hall = addModule[1].value;
-        const price = Number(addModule[2].value);
+        const move = addModule[0];
+        const hal = addModule[1];
+        const pri = addModule[2];
+
+        let movieName = move.value;
+        let hall = hal.value;
+        let price = Number (pri.value);
         if (movieName.length > 0 && hall.length > 0 && price / 1 != NaN) {
             let newItem = liBuilder(movieName, price, hall);
             moviesList.appendChild(newItem);
         }
+        move.value = '';
+        hal.value = '';
+        pri.value = '';
     }
 
     // MANAGING MOVING MOVIES FROM ACTIVE LIST INTO ARCHIVE
@@ -45,11 +53,11 @@ function solve() {
         if (ev.target.tagName == 'BUTTON') {
             let sourceLi = ev.path[2];
             let tSold = Number(sourceLi.querySelector('div > input').value);
-            if (tSold > 0) {
+            if (tSold >= 0 && tSold != '') {
                 //migrate to Archive
                 let mName = sourceLi.querySelector('span').textContent;
                 let tPrice = Number(sourceLi.querySelector('div > strong').textContent);
-                let totalSales = tSold * tPrice;
+                let totalSales = 'Total amount: ' + (tSold * tPrice).toFixed(2);
                 let archiveLi = liBuilder(mName, totalSales);
                 let archiveUl = archiveModule.querySelector('ul');
                 archiveUl.appendChild(archiveLi);
@@ -97,7 +105,7 @@ function solve() {
             span.textContent = name;
             li.appendChild(span);
             let strong1 = document.createElement('strong');
-            strong1.textContent = ha;
+            strong1.textContent = 'Hall: ' + ha;
             li.appendChild(strong1);
             let div = document.createElement('div');
             let strong2 = document.createElement('strong');
@@ -105,6 +113,7 @@ function solve() {
             div.appendChild(strong2);
             let input = document.createElement('input');
             input.placeholder = "Tickets Sold";
+            input.value = '';
             div.appendChild(input);
             let button = document.createElement('button');
             button.textContent = "Archive";
