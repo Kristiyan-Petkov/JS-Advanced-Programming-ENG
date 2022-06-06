@@ -1,0 +1,39 @@
+function toStringExtension() {
+    class Person {
+        constructor (name, email) {
+            this.name = name;
+            this.email = email;
+        }
+
+        toString() {
+            let className = this.constructor.name;
+            if (this.subject == undefined && this.course == undefined) {
+                return `${className} (name: ${this.name}, email: ${this.email})`;
+            } else if (this.subject == undefined) {
+                return `${className} (name: ${this.name}, email: ${this.email}, course: ${this.course})`;
+            } else if (this.course == undefined) {
+                return `${className} (name: ${this.name}, email: ${this.email}, subject: ${this.subject})`;
+            }
+        }
+    }
+
+    class Teacher extends Person{
+        constructor (name, email, subject) {
+            super(name, email);
+            this.subject = subject;
+        }
+    }
+
+    class Student extends Person {
+        constructor (name, email, course) {
+            super (name, email);
+            this.course = course;
+        }
+    }
+
+    return {
+        Person,
+        Teacher,
+        Student
+    }
+}
